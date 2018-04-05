@@ -5,6 +5,7 @@
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.methods.send.SendSticker;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
@@ -74,6 +75,14 @@ public class TelegaBot extends TelegramLongPollingBot {
     private void sendStick(String stickerId, Message msg) {
         try {
             sendSticker(new SendSticker().setChatId(msg.getChatId()).setSticker(stickerId));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void sendPhoto(String photoId, Message msg) {
+        try {
+            sendPhoto(new SendPhoto().setChatId(msg.getChatId()).setPhoto(photoId));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
