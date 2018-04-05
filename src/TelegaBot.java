@@ -45,14 +45,14 @@ public class TelegaBot extends TelegramLongPollingBot {
         String txt = msg.getText();
         switch (txt) {
             case "/start":
-                sendStick("CAADAgADFgAD4F7EEaslqaNJl0DzAg",msg);
+                sendStick("CAADAgADHwAD4F7EEbOmWe65VI4EAg",msg);
                 sendMsg(msg, "Hello! \uD83D\uDE18");
                 break;
             case "Назад":
                 sendMsg(msg, "down");
                 break;
             case "Домой":
-                sendStick("CAADAgADFgAD4F7EEaslqaNJl0DzAg",msg);
+                sendStick("CAADAgADHwAD4F7EEbOmWe65VI4EAg",msg);
                 sendMsg(msg, "Hello!! \uD83D\uDE18");
                 break;
         }
