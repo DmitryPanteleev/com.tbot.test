@@ -9,7 +9,9 @@ import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.methods.send.SendSticker;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -47,6 +49,7 @@ public class TelegaBot extends TelegramLongPollingBot {
             case "/start":
                 sendStick("CAADAgADHwAD4F7EEbOmWe65VI4EAg",msg);
                 sendMsg(msg, "Hello! \uD83D\uDE18");
+                sendInlineKeyboard();
                 break;
             case "Назад":
                 sendMsg(msg, "down");
@@ -54,6 +57,7 @@ public class TelegaBot extends TelegramLongPollingBot {
             case "Домой":
                 sendStick("CAADAgADHwAD4F7EEbOmWe65VI4EAg",msg);
                 sendMsg(msg, "Hello!! \uD83D\uDE18");
+                sendInlineKeyboard();
                 break;
         }
     }
@@ -69,6 +73,8 @@ public class TelegaBot extends TelegramLongPollingBot {
                 .setChatId(msg.getChatId())
                 .setText(text);
         s.setReplyMarkup(new ReplyKeyboardMarkup().setResizeKeyboard(true).setKeyboard(sendKeyboard()));
+        s.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(sendInlineKeyboard()));
+
 
 
         try {
@@ -95,16 +101,33 @@ public class TelegaBot extends TelegramLongPollingBot {
 
     }
     private List<KeyboardRow> sendKeyboard(){
-        KeyboardRow rowUp = new KeyboardRow();
+//        KeyboardRow rowUp = new KeyboardRow();
         KeyboardRow rowDown = new KeyboardRow();
 //        rowUp.add("/start");
         rowDown.add("Назад");
         rowDown.add("Домой");
         List<KeyboardRow> getKeyboardList = new ArrayList<>();
-        getKeyboardList.add(rowUp);
+//        getKeyboardList.add(rowUp);
         getKeyboardList.add(rowDown);
         return getKeyboardList;
     }
 
+    private List<List<InlineKeyboardButton>> sendInlineKeyboard(){
+        InlineKeyboardMarkup firstInlineKeyboardRow = new InlineKeyboardMarkup();
+
+//        InlineKeyboardButton test1 = new InlineKeyboardButton("Пункт1").setText("Test1").setCallbackData("Какая-то инфа1");
+
+        List<List<InlineKeyboardButton>> inlineKeyboardMarkupList = new ArrayList<>();
+        List<InlineKeyboardButton> firstButtonList = new ArrayList<>();
+        firstButtonList.add(new InlineKeyboardButton().setText("button1").setCallbackData("***button1***"));
+        inlineKeyboardMarkupList.add(firstButtonList);
+        firstInlineKeyboardRow.setKeyboard(inlineKeyboardMarkupList);
+
+
+//        firstButtonList.add(test1);
+//        firstInlineKeyboardRow.setKeyboard()
+
+        return inlineKeyboardMarkupList;
+    }
 
 }
