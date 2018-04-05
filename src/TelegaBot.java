@@ -97,7 +97,7 @@ public class TelegaBot extends TelegramLongPollingBot {
     private List<KeyboardRow> sendKeyboard(){
         KeyboardRow rowUp = new KeyboardRow();
         KeyboardRow rowDown = new KeyboardRow();
-        rowUp.add("/start");
+//        rowUp.add("/start");
         rowDown.add("Назад");
         rowDown.add("Домой");
         List<KeyboardRow> getKeyboardList = new ArrayList<>();
