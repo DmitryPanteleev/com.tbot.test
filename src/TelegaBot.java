@@ -10,12 +10,16 @@ import org.telegram.telegrambots.api.methods.send.SendSticker;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class TelegaBot extends TelegramLongPollingBot {
-    GetKeyboard getKeyboard = new GetKeyboard();
+
     Text text1 = new Text();
 
     public static void main(String[] args) {
@@ -48,7 +52,8 @@ public class TelegaBot extends TelegramLongPollingBot {
                 sendMsg(msg, "down");
                 break;
             case "Домой":
-                sendMsg(msg, text1.getTest1());
+                sendStick("CAADAgADFgAD4F7EEaslqaNJl0DzAg",msg);
+                sendMsg(msg, "Hello!! \uD83D\uDE18");
                 break;
         }
     }
@@ -63,7 +68,8 @@ public class TelegaBot extends TelegramLongPollingBot {
         SendMessage s = new SendMessage()
                 .setChatId(msg.getChatId())
                 .setText(text);
-        s.setReplyMarkup(new ReplyKeyboardMarkup().setResizeKeyboard(true).setKeyboard(getKeyboard.getKeyboardRowList()));
+        s.setReplyMarkup(new ReplyKeyboardMarkup().setResizeKeyboard(true).setKeyboard(sendKeyboard()));
+
 
         try {
             execute(s);
@@ -88,4 +94,17 @@ public class TelegaBot extends TelegramLongPollingBot {
         }
 
     }
+    private List<KeyboardRow> sendKeyboard(){
+        KeyboardRow rowUp = new KeyboardRow();
+        KeyboardRow rowDown = new KeyboardRow();
+        rowUp.add("/start");
+        rowDown.add("Назад");
+        rowDown.add("Домой");
+        List<KeyboardRow> getKeyboardList = new ArrayList<>();
+        getKeyboardList.add(rowUp);
+        getKeyboardList.add(rowDown);
+        return getKeyboardList;
+    }
+
+
 }
