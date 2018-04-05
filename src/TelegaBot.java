@@ -5,6 +5,7 @@
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendSticker;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -38,8 +39,9 @@ public class TelegaBot extends TelegramLongPollingBot {
         Message msg = e.getMessage(); // Это нам понадобится
         String txt = msg.getText();
         switch (txt) {
-            case "/Start":
-                sendMsg(msg, "Hello! \\uD83D\\uDC4D");
+            case "/start":
+                sendStick("CAADAgADFgAD4F7EEaslqaNJl0DzAg",msg);
+                sendMsg(msg, "Hello! \uD83D\uDE18");
                 break;
             case "Назад":
                 sendMsg(msg, "down");
@@ -56,12 +58,10 @@ public class TelegaBot extends TelegramLongPollingBot {
     }
 
     private void sendMsg(Message msg, String text) {
+
         SendMessage s = new SendMessage()
                 .setChatId(msg.getChatId())
                 .setText(text);
-
-        GetKeyboard getKeyboard = new GetKeyboard();
-
         s.setReplyMarkup(new ReplyKeyboardMarkup().setResizeKeyboard(true).setKeyboard(getKeyboard.getKeyboardRowList()));
 
         try {
@@ -69,7 +69,14 @@ public class TelegaBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-
     }
 
+    private void sendStick(String stickerId, Message msg) {
+        try {
+            sendSticker(new SendSticker().setChatId(msg.getChatId()).setSticker(stickerId));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
