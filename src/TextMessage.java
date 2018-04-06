@@ -1,4 +1,5 @@
-public class Text {
+public class TextMessage {
+
     private String test1 = "Тестовая надпись1";
     private String test2 = "Тестовая надпись2";
     private String test3 = "Тестовая надпись3";
