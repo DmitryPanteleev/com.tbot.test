@@ -89,7 +89,7 @@ public class TelegaBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "516033907:AAGl4zfvz6M_-vXhIF0zFW_-RO8r1y5gp5g";
+        return ;
     }
 
     private void sendMsg(long chatId, String text) {
