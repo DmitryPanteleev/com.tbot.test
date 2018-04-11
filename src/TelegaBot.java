@@ -24,8 +24,9 @@ import java.util.List;
 
 
 public class TelegaBot extends TelegramLongPollingBot {
+    private List<List<InlineKeyboardButton>> inlineKeyboard;
 
-    TextMessage textMessage1 = new TextMessage();
+//    TextMessage textMessage1 = new TextMessage();
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
@@ -46,50 +47,67 @@ public class TelegaBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update e) {
-        CallbackQuery query = e.getCallbackQuery();
+        Message msg = e.getMessage(); // Это нам понадобится // тут мы получаем сообщение
         long chatId;
+        try {
+            chatId = msg.getChatId();
+        } catch (Exception i) {
+            chatId = e.getCallbackQuery().getFrom().getId();
+        }
+        try {
+            String txt = msg.getText();
+            switch (txt) {
+                case "/start":
+                    inlineKeyboard = sendInlineKeyboard1();
+                    sendStick("CAADAgADHwAD4F7EEbOmWe65VI4EAg", msg);
+                    sendMsg(chatId, "Hello! \uD83D\uDE18");
+                    break;
+                case "Назад":
+                    inlineKeyboard = sendInlineKeyboard2();
+                    sendMsg(msg.getChatId(), "down");
+                    break;
+                case "Домой":
+                    inlineKeyboard = sendInlineKeyboard1();
+                    sendStick("CAADAgADHwAD4F7EEbOmWe65VI4EAg", msg);
+                    sendMsg(chatId, "Hello!! \uD83D\uDE18");
+                    break;
 
-//        if (query.getData().equals("test1") ) {
-//            chatId = query.getFrom().getId();
-//            sendMsg(query.getFrom().getId(), new TextMessage().getTest1() + " " + query.getData());
-//
-//            EditMessageReplyMarkup markup = new EditMessageReplyMarkup().setMessageId(query.getMessage().getMessageId()).setChatId(chatId);
-//            markup.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(sendInlineKeyboard()));
-//            try {
-//                markup.validate();
-//            } catch (TelegramApiValidationException e1) {
-//                e1.printStackTrace();
-//            }
-//            return;
-//        }
+            }
+        } catch (Exception i) {
 
+            CallbackQuery query = e.getCallbackQuery();
 
-        Message msg = e.getMessage(); // Это нам понадобится
-        chatId = msg.getChatId();
-        String txt = msg.getText();
-        switch (txt) {
-            case "/start":
-                sendStick("CAADAgADHwAD4F7EEbOmWe65VI4EAg",msg);
-                sendMsg(chatId, "Hello! \uD83D\uDE18");
-                sendInlineKeyboard();
-                break;
-            case "Назад":
-                sendMsg(msg.getChatId(), "down");
+            if (e.getCallbackQuery() != null) {
+                if (query.getData().equals("test1")) {
+                    inlineKeyboard = sendInlineKeyboard1();
+                    sendMsg(query.getFrom().getId(), new TextMessage().getTest1() + " " + query.getData());
 
-                break;
-            case "Домой":
-                sendStick("CAADAgADHwAD4F7EEbOmWe65VI4EAg",msg);
-                sendMsg(msg.getChatId(), "Hello!! \uD83D\uDE18");
-                sendInlineKeyboard();
-                break;
-
+                    EditMessageReplyMarkup markup = new EditMessageReplyMarkup().setMessageId(query.getMessage().getMessageId()).setChatId(query.getId());
+                    try {
+                        markup.validate();
+                    } catch (TelegramApiValidationException e1) {
+                        e1.printStackTrace();
+                    }
+//                    return;
+                } else if (query.getData().equals("test2")) {
+                    inlineKeyboard = sendInlineKeyboard2();
+                    sendMsg(query.getFrom().getId(), new TextMessage().getTest2() + " " + query.getData());
+                    EditMessageReplyMarkup markup = new EditMessageReplyMarkup().setMessageId(query.getMessage().getMessageId()).setChatId(query.getId());
+                    try {
+                        markup.validate();
+                    } catch (TelegramApiValidationException e1) {
+                        e1.printStackTrace();
+                    }
+//                    return;
+                }
+            }
         }
     }
 
 
     @Override
     public String getBotToken() {
-        return ;
+        return "";
     }
 
     private void sendMsg(long chatId, String text) {
@@ -98,7 +116,7 @@ public class TelegaBot extends TelegramLongPollingBot {
                 .setChatId(chatId)
                 .setText(text);
         s.setReplyMarkup(new ReplyKeyboardMarkup().setResizeKeyboard(true).setKeyboard(sendKeyboard()));
-        s.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(sendInlineKeyboard()));
+        s.setReplyMarkup(new InlineKeyboardMarkup().setKeyboard(inlineKeyboard));
 
         try {
             execute(s);
@@ -115,6 +133,7 @@ public class TelegaBot extends TelegramLongPollingBot {
         }
 
     }
+
     private void sendPhoto(String photoId, Message msg) {
         try {
             sendPhoto(new SendPhoto().setChatId(msg.getChatId()).setPhoto(photoId));
@@ -123,7 +142,8 @@ public class TelegaBot extends TelegramLongPollingBot {
         }
 
     }
-    private List<KeyboardRow> sendKeyboard(){
+
+    private List<KeyboardRow> sendKeyboard() {
 //        KeyboardRow rowUp = new KeyboardRow();
         KeyboardRow rowDown = new KeyboardRow();
 //        rowUp.add("/start");
@@ -135,10 +155,8 @@ public class TelegaBot extends TelegramLongPollingBot {
         return getKeyboardList;
     }
 
-    private List<List<InlineKeyboardButton>> sendInlineKeyboard(){
+    private List<List<InlineKeyboardButton>> sendInlineKeyboard1() {
         InlineKeyboardMarkup firstInlineKeyboardRow = new InlineKeyboardMarkup();
-
-//        InlineKeyboardButton test1 = new InlineKeyboardButton("Пункт1").setText("Test1").setCallbackData("Какая-то инфа1");
 
         List<List<InlineKeyboardButton>> inlineKeyboardMarkupList = new ArrayList<>();
         List<InlineKeyboardButton> firstButtonList = new ArrayList<>();
@@ -147,27 +165,17 @@ public class TelegaBot extends TelegramLongPollingBot {
         inlineKeyboardMarkupList.add(firstButtonList);
         firstInlineKeyboardRow.setKeyboard(inlineKeyboardMarkupList);
 
-
-//        firstButtonList.add(test1);
-//        firstInlineKeyboardRow.setKeyboard()
-
         return inlineKeyboardMarkupList;
     }
 
-//    private List<List<InlineKeyboardButton>> sendInlineKeyboard1(){
-//
-////        InlineKeyboardButton test1 = new InlineKeyboardButton("Пункт1").setText("Test1").setCallbackData("Какая-то инфа1");
-//
-//        List<List<InlineKeyboardButton>> inlineKeyboardMarkupList = new ArrayList<>();
-//        List<InlineKeyboardButton> firstButtonList = new ArrayList<>();
-//        firstButtonList.add(new InlineKeyboardButton().setText("button2").setCallbackData("2322332"));
-//        inlineKeyboardMarkupList.add(firstButtonList);
-//
-//
-////        firstButtonList.add(test1);
-////        firstInlineKeyboardRow.setKeyboard()
-//
-//        return inlineKeyboardMarkupList;
-//    }
+    private List<List<InlineKeyboardButton>> sendInlineKeyboard2() {
+
+        List<List<InlineKeyboardButton>> inlineKeyboardMarkupList = new ArrayList<>();
+        List<InlineKeyboardButton> firstButtonList = new ArrayList<>();
+        firstButtonList.add(new InlineKeyboardButton().setText("button3").setCallbackData("test3"));
+        inlineKeyboardMarkupList.add(firstButtonList);
+
+        return inlineKeyboardMarkupList;
+    }
 
 }
