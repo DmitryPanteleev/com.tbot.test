@@ -25,6 +25,7 @@ import java.util.List;
 
 public class TelegaBot extends TelegramLongPollingBot {
     private List<List<InlineKeyboardButton>> inlineKeyboard;
+    BotToken botToken = new BotToken();
 
 //    TextMessage textMessage1 = new TextMessage();
 
@@ -98,6 +99,16 @@ public class TelegaBot extends TelegramLongPollingBot {
                     } catch (TelegramApiValidationException e1) {
                         e1.printStackTrace();
                     }
+                }else
+                        if (query.getData().equals("test3")) {
+                    inlineKeyboard = sendInlineKeyboard1();
+                    sendMsg(query.getFrom().getId(), new TextMessage().getTest3() + " " + query.getData());
+                    EditMessageReplyMarkup markup = new EditMessageReplyMarkup().setMessageId(query.getMessage().getMessageId()).setChatId(query.getId());
+                    try {
+                        markup.validate();
+                    } catch (TelegramApiValidationException e1) {
+                        e1.printStackTrace();
+                    }
 //                    return;
                 }
             }
@@ -107,7 +118,7 @@ public class TelegaBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "";
+        return botToken.getNewToken();
     }
 
     private void sendMsg(long chatId, String text) {
